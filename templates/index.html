@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>Bootstrap Example</title>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap.min.css') }}">
+        <link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap-theme.min.css') }}">
+        <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    </head>
+
+    <body>
+        <nav class="navbar navbar-inverse">
+            <div class="container-fluid">
+                <div class="navbar-header">
+                    <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+                        <span class="sr-only">Toggle navigation</span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                    <a class="navbar-brand" href="{{ url_for('.index') }}">
+                        <span class="glyphicon glyphicon-home"></span>
+                    </a>
+                </div>
+                <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                    <ul class="nav navbar-nav">
+                        <li {% if responce is defined and responce['active'] == 0 %} class="active" {% endif %}>
+                            <a href="{{ url_for('.huffman') }}">code</a>
+                        </li>
+                        <li {% if responce is defined and responce['active'] == 1 %} class="active" {% endif %}>
+                            <a href="{{ url_for('.encode_message') }}">message</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+
+        <div class="container">
+            {% if responce is undefined %}
+                <h1>Welcome to huffman coding</h1>
+            {% else %}
+                <h2>Huffman Coding</h2>
+            {% endif %}
+            <p>The basic idea in Huffman coding is to assign short codewords to those input blocks with high probabilities and long codewords to those with low probabilities. This concept is similar to that of the Morse code.</p>
+            <p>A Huffman code is designed by merging together the two least probable characters, and repeating this process until there is only one character remaining. A code tree is thus generated and the Huffman code is obtained from the labeling of the code tree.</p>
+            {% if responce is defined %}
+                <hr>
+                {% if responce['message'] %}
+                    <p>Input : {{ responce['message'] }}</p>
+                {% endif %}
+                <table class="table">
+                    <thead>
+                        <tr class="warning">
+                            <th>Symbol</th>
+                            <th>Weight</th>
+                            <th>Huffman Code</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for item in responce['huff'] %}
+                            <tr class="success">
+                                <td>{{ item[0] }}</td>
+                                <td>{{ responce['freq'][item[0]] }}</td>
+                                <td>{{ item[1] }}</td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            {% endif %}
+        </div>
+
+        <script src="{{ url_for('static', filename='js/jquery-3.3.1.min.js') }}"></script>
+        <script src="{{ url_for('static', filename='js/bootstrap.min.js') }}"></script>
+        <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+    </body>
+</html>
+
